@@ -1,0 +1,48 @@
+source "https://rubygems.org"
+
+# Rails
+gem "rails", "~> 8.1.1"
+
+# Database
+gem "pg", "~> 1.1"
+
+# Web server
+gem "puma", ">= 5.0"
+
+# JSON API builder
+gem "jbuilder"
+
+# Password security
+gem "bcrypt"
+
+# Timezone for Windows
+gem "tzinfo-data", platforms: %i[windows jruby]
+
+# Rails caching and queueing
+gem "solid_cache"
+gem "solid_queue"
+gem "solid_cable"
+
+# Speed up boot time
+gem "bootsnap", require: false
+
+# Optional deploy & HTTP acceleration
+gem "kamal", require: false
+gem "thruster", require: false
+
+# Active Storage variants
+gem "image_processing", "~> 1.2"
+
+# CORS for APIs
+gem "rack-cors"
+
+# Development & Test gems
+group :development, :test do
+  gem "pry"
+  gem "byebug"
+
+  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
+  gem "bundler-audit", require: false
+  gem "brakeman", require: false
+  gem "rubocop-rails-omakase", require: false
+end

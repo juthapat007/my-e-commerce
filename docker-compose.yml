@@ -1,0 +1,46 @@
+
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: rails-backend
+    command: bash -c "rm -f tmp/pids/server.pid && bin/rails server -b 0.0.0.0 -p 3000"
+
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: postgres://postgres:postgres@db:5432/myapp_dev
+    volumes:
+      - ./backend:/rails
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: angular-frontend
+    command: npm start
+    ports:
+      - "4200:80"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:16
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: myapp_dev
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:
