@@ -1,0 +1,7 @@
+commend line pg
+
+chek ประเภทข้อมูลในตาราง
+\d users
+
+select ข้อมูลในตารางทั้งหมด 
+\dt 
