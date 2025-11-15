@@ -1,0 +1,129 @@
+
+ <!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>E-commerce Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+  <div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto pb-20">
+
+<div class="top-app-bar">
+  <div class="profile-pic-container">
+    <div class="profile-pic" style='background-image: url("https://tse1.mm.bing.net/th/id/OIP.HldaE_hiyhEv1q_K3dvXJQHaE8?rs=1&pid=ImgDetMain&o=7&rm=3");'>
+
+    </div>
+    <h2>Dashboard</h2>
+  </div>
+  <button class="settings-btn">
+    <span class="material-symbols-outlined">settings</span>
+  </button>
+</div>
+    
+    <h1 >Hello, Admin</h1>
+    
+
+    <div class="flex flex-wrap gap-4 p-4">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p class="stat-label">Today's Revenue</p>
+          <p class="stat-value">$1,450</p>
+          <p class="stat-change">+5.2%</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Pending Orders</p>
+          <p class="stat-value">12</p>
+          <p class="stat-change">+2.1%</p>
+        </div>
+        <div class="stat-card full-width">
+          <p class="stat-label">New Customers</p>
+          <p class="stat-value">28</p>
+          <p class="stat-change">+10%</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap gap-4 p-4">
+          <h1 >Management</h1><br>
+      <div class="management-grid">
+        <div class="management-card">
+          <span class="material-symbols-outlined">inventory_2</span>
+          <div class="management-card-content">
+            <h2>Products</h2>
+            <p>Manage inventory</p>
+          </div>
+        </div>
+        
+        <div class="management-card">
+          <span class="material-symbols-outlined">receipt_long</span>
+          <div class="management-card-content">
+            <h2>Orders</h2>
+            <p>Process orders</p>
+          </div>
+        </div>
+        
+        <div class="management-card">
+          <span class="material-symbols-outlined">group</span>
+          <div class="management-card-content">
+            <h2>Users</h2>
+            <p>Manage customers</p>
+          </div>
+        </div>
+        
+        <div class="management-card">
+          <span class="material-symbols-outlined">category</span>
+          <div class="management-card-content">
+            <h2>Categories</h2>
+            <p>Organize products</p>
+          </div>
+        </div>
+        
+        <div class="management-card">
+          <span class="material-symbols-outlined">monitoring</span>
+          <div class="management-card-content">
+            <h2>Analytics</h2>
+            <p>View sales reports</p>
+          </div>
+        </div>
+        
+        <div class="management-card">
+          <span class="material-symbols-outlined">sell</span>
+          <div class="management-card-content">
+            <h2>Discounts</h2>
+            <p>Create discounts</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <div class="bottom-nav-content">
+      <a class="bottom-nav-item" href="#">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Dashboard</span>
+      </a>
+<a class="bottom-nav-item" routerLink="/products">
+  <span class="material-symbols-outlined">inventory_2</span>
+  <span>Products</span>
+</a>
+
+
+
+      <a class="bottom-nav-item" href="#">
+        <span class="material-symbols-outlined">receipt_long</span>
+        <span>Orders</span>
+      </a>
+      <a class="bottom-nav-item" href="#">
+        <span class="material-symbols-outlined">person</span>
+        <span>Profile</span>
+      </a>
+    </div>
+  </div>
+</body>
+  </html> 

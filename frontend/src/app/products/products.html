@@ -1,0 +1,16 @@
+<p>products works!</p>
+<br>
+
+<ul>
+  <li *ngFor="let product of products">
+    <strong>{{ product.name }}</strong> - {{ product.price | currency:product.currency }}
+    <br>
+    <p>{{ product.description }}</p>
+    <p>{{ product.brand }}</p>
+    <img [src]="product.image_url" alt="not found" width="150">
+<p>ประเภทสินค้า : {{ product.category?.name}}</p>
+
+    <hr><br>
+  </li>
+
+</ul>
