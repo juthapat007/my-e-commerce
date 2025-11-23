@@ -25,7 +25,7 @@
   </button>
 </div>
     
-    <h1 >Hello, Admin</h1>
+    <!-- <h1 >Hello, Admin</h1>
     
 
     <div class="flex flex-wrap gap-4 p-4">
@@ -46,9 +46,9 @@
           <p class="stat-change">+10%</p>
         </div>
       </div>
-    </div>
+    </div> -->
     
-    <div class="flex flex-wrap gap-4 p-4">
+    <!-- <div class="flex flex-wrap gap-4 p-4">
           <h1 >Management</h1><br>
       <div class="management-grid">
         <div class="management-card">
@@ -67,6 +67,7 @@
           </div>
         </div>
         
+     <a routerLink="/users">
         <div class="management-card">
           <span class="material-symbols-outlined">group</span>
           <div class="management-card-content">
@@ -74,14 +75,16 @@
             <p>Manage customers</p>
           </div>
         </div>
+     </a>
         
+        <a routerLink="/category">
         <div class="management-card">
           <span class="material-symbols-outlined">category</span>
           <div class="management-card-content">
             <h2>Categories</h2>
             <p>Organize products</p>
           </div>
-        </div>
+        </div></a>
         
         <div class="management-card">
           <span class="material-symbols-outlined">monitoring</span>
@@ -99,31 +102,39 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
+
+
   </div>
-  
+
+
   <div class="bottom-nav">
     <div class="bottom-nav-content">
-      <a class="bottom-nav-item" href="#">
+      <a class="bottom-nav-item">
         <span class="material-symbols-outlined">dashboard</span>
         <span>Dashboard</span>
       </a>
-<a class="bottom-nav-item" routerLink="/products">
+<a class="bottom-nav-item" [routerLink]="['/products']">
   <span class="material-symbols-outlined">inventory_2</span>
   <span>Products</span>
 </a>
+
+
+  <!-- <a >Category</a>-->
 
 
 
       <a class="bottom-nav-item" href="#">
         <span class="material-symbols-outlined">receipt_long</span>
         <span>Orders</span>
-      </a>
-      <a class="bottom-nav-item" href="#">
+      </a >
+
+      <a class="bottom-nav-item" [routerLink]="['/users']">
         <span class="material-symbols-outlined">person</span>
         <span>Profile</span>
       </a>
     </div>
   </div>
 </body>
-  </html> 
+  </html>  
+<router-outlet></router-outlet>

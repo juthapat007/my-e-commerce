@@ -1,0 +1,28 @@
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>E-commerce Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+  </head>
+<body style="background-color: rgb(255, 89, 13);">
+<div class="top-app-bar">
+  <div class="profile-pic-container">
+    <div class="profile-pic" style='background-image: url("https://tse1.mm.bing.net/th/id/OIP.HldaE_hiyhEv1q_K3dvXJQHaE8?rs=1&pid=ImgDetMain&o=7&rm=3");'>
+
+    </div>
+    <h2>Users</h2>
+  </div>
+  <button class="settings-btn">
+    <span class="material-symbols-outlined">settings</span>
+  </button>
+</div>
+<h1>👥 รายชื่อผู้ใช้ทั้งหมด</h1>
+<ul>
+  <li *ngFor="let user of users">
+    <strong>{{ user.name }}</strong> — {{ user.email }}
+  </li>
+</ul>
+</body>

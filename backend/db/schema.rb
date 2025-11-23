@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_10_200010) do
+ActiveRecord::Schema[8.1].define(version: 0) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -37,10 +37,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_10_200010) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.string "email"
     t.string "name"
-    t.datetime "updated_at", null: false
+    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
   add_foreign_key "products", "categories", name: "products_category_id_fkey"
