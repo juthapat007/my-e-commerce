@@ -49,3 +49,7 @@ Thumbs.db
 # Node modules (ถ้าใช้ Webpacker/JS)
 /node_modules
 /yarn-error.log
+
+# เพิ่มท้ายไฟล์
+/pgdata
+/vendor/bundle
