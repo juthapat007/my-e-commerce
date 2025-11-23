@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductsService } from './services/products.service';

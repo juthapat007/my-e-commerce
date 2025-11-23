@@ -33,3 +33,23 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+/.vscode
+/.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database
+/*.sqlite3
+/*.sqlite3-*
+
+# Node modules (ถ้าใช้ Webpacker/JS)
+/node_modules
+/yarn-error.log
+
+# เพิ่มท้ายไฟล์
+/pgdata
+/vendor/bundle
