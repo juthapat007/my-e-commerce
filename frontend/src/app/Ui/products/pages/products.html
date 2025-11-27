@@ -52,16 +52,18 @@
             </span>
           </div>
           <div class="product-actions">
+            <a [routerLink]="['/products-edit']" [queryParams]="{ id: product.id }">
+              <button
+                class="btn-products btn btn-warning flex-grow-1 me-1"
+                (click)="onEditProduct(product.id)"
+                title="Edit Product"
+              >
+                <span class="material-symbols-outlined">edit</span>
+              </button>
+            </a>
             <button
-              class="action-btn edit"
-              (click)="onEditProduct(product.id)"
-              title="Edit Product"
-            >
-              <span class="material-symbols-outlined">edit</span>
-            </button>
-            <button
-              class="action-btn delete"
-              (click)="onDeleteProduct(product.id, product.name)"
+              class="btn-products btn btn-danger"
+              (click)="openConfirmDelete(product.id, product.name)"
               title="Delete Product"
             >
               <span class="material-symbols-outlined">delete</span>
@@ -98,10 +100,46 @@
 
   <!-- Floating Action Button -->
   <a class="bottom-nav-item" [routerLink]="['/products-insert']">
-    <div class="fab-container">
+    <div class="fab-container btn-primary bg-primary">
       <button class="fab">
-        <span class="material-symbols-outlined">add</span>
+        <span class="material-symbols-outlined fs-4">+</span>
       </button>
     </div>
   </a>
+</div>
+
+<!-- Custom Delete Confirm Modal -->
+<div
+  class="modal fade show d-flex align-items-center justify-content-center"
+  tabindex="-1"
+  role="dialog"
+  style="display: flex; background: rgba(0, 0, 0, 0.6); min-height: 100vh"
+  *ngIf="confirmDeleteVisible"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-3 shadow pd-3">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Confirm Delete</h5>
+        <button type="button" class="btn-close me-2" (click)="closeConfirmDelete()"></button>
+      </div>
+
+      <div class="modal-body px-2">
+        <p class="fs-5">
+          Are you sure you want to delete
+          <strong class="text-danger">{{ deleteTarget?.name }}</strong
+          >?
+        </p>
+        <p class="text-muted">This action cannot be undone.</p>
+      </div>
+      <br />
+      <div class="modal-footer">
+        <div style="margin-top: 13px; margin-bottom: 13px">
+          <button class="btn-products btn btn-secondary me-1" (click)="closeConfirmDelete()">
+            Cancel
+          </button>
+          <button class="btn-products btn btn-danger me-1" (click)="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

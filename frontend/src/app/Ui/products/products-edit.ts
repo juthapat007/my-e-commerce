@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-products-edit',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './pages/products-edit.html',
+  styleUrls: ['../style.css'],
 })
-export class ProductsEdit {
-
-}
+export class ProductsEdit {}

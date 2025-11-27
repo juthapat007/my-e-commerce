@@ -63,6 +63,7 @@ export class Products implements OnInit {
 
   onDeleteProduct(productId: number, productName: string): void {
     // แสดง confirmation dialog
+
     const confirmed = confirm(
       `Are you sure you want to delete "${productName}"?\n\nThis action cannot be undone.`
     );
@@ -94,5 +95,39 @@ export class Products implements OnInit {
     } else {
       console.log('Delete cancelled');
     }
+  }
+  // ตัวแปร modal
+  confirmDeleteVisible = false;
+  deleteTarget: { id: number; name: string } | null = null;
+
+  // เปิด modal
+  openConfirmDelete(id: number, name: string) {
+    this.deleteTarget = { id, name };
+    this.confirmDeleteVisible = true;
+  }
+
+  // ปิด modal
+  closeConfirmDelete() {
+    this.confirmDeleteVisible = false;
+    this.deleteTarget = null;
+  }
+
+  // เมื่อกด Confirm
+  confirmDelete() {
+    if (!this.deleteTarget) return;
+
+    const { id, name } = this.deleteTarget;
+
+    this.productsService.deleteProduct(id).subscribe({
+      next: () => {
+        this.products = this.products.filter((p) => p.id !== id);
+        alert(`Product "${name}" deleted.`);
+        this.closeConfirmDelete();
+      },
+      error: (err) => {
+        alert('Delete failed.');
+        this.closeConfirmDelete();
+      },
+    });
   }
 }

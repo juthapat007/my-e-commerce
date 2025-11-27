@@ -1,4 +1,4 @@
-<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto pb-20">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto pb-20 bg-danger">
   <!-- Top App Bar -->
   <div class="top-app-bar">
     <div class="profile-pic-container">
@@ -16,27 +16,29 @@
   </div>
 
   <!-- Router Outlet for Child Components -->
-  <router-outlet></router-outlet>
 
   <!-- Bottom Navigation -->
+
   <div class="bottom-nav">
     <div class="bottom-nav-content">
-      <a class="bottom-nav-item" [routerLink]="['/first-page']">
+      <a class="bottom-nav-item" href="#">
         <span class="material-symbols-outlined">dashboard</span>
         <span>Dashboard</span>
       </a>
-      <a class="bottom-nav-item" [routerLink]="['/products']">
+      <a class="bottom-nav-item" routerLink="/products">
         <span class="material-symbols-outlined">inventory_2</span>
         <span>Products</span>
       </a>
+
       <a class="bottom-nav-item" href="#">
         <span class="material-symbols-outlined">receipt_long</span>
         <span>Orders</span>
       </a>
-      <a class="bottom-nav-item" [routerLink]="['/users']">
+      <a class="bottom-nav-item" href="/users">
         <span class="material-symbols-outlined">person</span>
         <span>Profile</span>
       </a>
     </div>
   </div>
 </div>
+<router-outlet></router-outlet>
