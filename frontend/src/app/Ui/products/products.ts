@@ -1,159 +1,98 @@
-
-// import { Component, OnInit } from '@angular/core';
-// import { ProductsService, Product, Category } from './products.service';
-// import { CurrencyPipe } from '@angular/common';
-
-
-// Component → ใช้สร้าง Angular Component
-// OnInit → lifecycle interface ของ Angular → ใช้กับ ngOnInit()
-// ProductsService → service ที่เราเขียนเพื่อเรียก Rails API (getProducts(), getCategories())
-// Product, Category → type interface สำหรับข้อมูลสินค้าและหมวดหมู่
-// CurrencyPipe → pipe ของ Angular สำหรับ format ตัวเลขเป็นสกุลเงิน
-
-
-// @Component({
-//   selector: 'app-products',
-//   templateUrl: './products.html',
-//     imports:[CurrencyPipe],
-//   styleUrls: ['./products.css']
-// })
-// export class ProductsComponent implements OnInit { 
-// # ใช้ implements OnInit → จะเรียก ngOnInit() หลัง component ถูกสร้างเสร็จ
-
-
-
-
-
-
-//   products: Product[] = [];
-//   categories: Category[] = [];
-//   loading = false;
-//   error: string | null = null;
-// products → array เก็บสินค้าที่เรียกมาจาก API
-// categories → array เก็บหมวดหมู่สินค้า
-// loading → ใช้แสดง loading spinner ขณะเรียก API
-// error → เก็บข้อความ error หากโหลดไม่สำเร็จ
-//   // Filter options
-//   selectedCategoryId?: number;
-//   searchTerm = '';
-//   showInStockOnly = false;
-
-
-// selectedCategoryId → หมวดหมู่ที่ผู้ใช้เลือก (optional)
-// searchTerm → คำค้นหาสินค้า
-// showInStockOnly → toggle ว่าจะแสดงเฉพาะสินค้าที่มี stock > 0
-
-
-//   constructor(private productsService: ProductsService) {}
-// # inject ProductsService มาให้ component ใช้งาน → เรียก API ได้
-
-
-//   ngOnInit(): void {
-//     this.loadCategories();
-//     this.loadProducts();
-//   }
-// # เรียก loadCategories() และ loadProducts() เพื่อดึงข้อมูลเริ่มต้น 
-
-
-//   loadCategories(): void {
-//     this.productsService.getCategories().subscribe({
-//       next: (categories) => {
-//         this.categories = categories;
-//       },
-//       error: (err) => {
-//         console.error('Error loading categories:', err);
-//       }
-//     });
-//   }
-
-
-// เรียก getCategories() จาก service → subscribe เป็น observable
-// ถ้าได้ข้อมูล → เก็บใน this.categories
-// ถ้า error → log ลง console มันมาจาก service น่ะ 
-//   // Get all categories
-//   getCategories(): Observable<Category[]> {
-// # ฟังก์ชันนี้จะ return Observable ที่มีข้อมูลเป็น array ของ Category (เช่น [ {id:1, name:'Hair Care'}, {id:2, name:'Toothpaste'} ])
-
-
-//     return this.http.get<Category[]>(`${this.apiUrl}/categories`);
-// # ใช้ HttpClient ของ Angular ส่ง HTTP GET request ไปยัง URL ที่กำหนด นี่คือendpoint ของ Rails API 
-// # เช่น http://localhost:3000/api/v1/categories
-// }
-// =======================================================
-//   loadProducts(): void {
-//     this.loading = true;
-//     this.error = null;
-
-
-//     const filters = {
-//       category_id: this.selectedCategoryId, #object filters ส่งไปยัง service ฉันกำหนด typeไว้แล้ว
-//       search: this.searchTerm || undefined,
-//       in_stock: this.showInStockOnly || undefined
-// # เพื่อไม่ส่ง search ถ้าเป็น empty string
-//     };
-
-
-//     this.productsService.getProducts(filters).subscribe({
-// # ส่ง request ไป backend ด้วย filters ที่สร้าง
-
-
-//       next: (products) => {
-//         this.products = products;
-//         this.loading = false;
-// #  เก็บผลและปิด loading
-//       },
-//       error: (err) => {
-//         this.error = 'Failed to load products. Please try again.';
-//         this.loading = false;
-//         console.error('Error loading products:', err);
-// #  เกิด error set ข้อความให้ UI และปิด loading
-//       }
-//     });
-
 import { Component, OnInit } from '@angular/core';
-import { ProductsService,Product } from '../../services/products.service'; 
-import { Category } from '../../services/products.service'; 
+import { ProductsService, Product } from '../../services/products.service';
 import { categories, CategoriesService } from '../../services/categories.service';
-import { CommonModule ,NgFor } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { AppComponent } from '../../app';
+import { CommonModule, NgFor, CurrencyPipe } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
+
 @Component({
   selector: 'app-products',
   standalone: true,
   templateUrl: './pages/products.html',
-  imports: [
-    CommonModule,
-    RouterModule,
-    NgFor
-  ],
-  styleUrls: ['../style.css']
+  imports: [CommonModule, RouterModule, NgFor, CurrencyPipe],
+  styleUrls: ['../style.css'],
 })
 export class Products implements OnInit {
   products: Product[] = [];
   category: categories[] = [];
+  isLoading = false;
+  errorMessage = '';
 
   constructor(
     private productsService: ProductsService,
-    private CategoriesService: CategoriesService
-  ){}
+    private categoriesService: CategoriesService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.loadProducts();
+    this.loadCategories();
+  }
+
+  loadProducts(): void {
+    this.isLoading = true;
     this.productsService.getProducts().subscribe({
       next: (data) => {
         this.products = data;
-        console.log('Products:', data);
+        console.log('Products loaded:', data);
+        this.isLoading = false;
       },
-      error: (err) => console.error('Error loading products:', err)
+      error: (err) => {
+        console.error('Error loading products:', err);
+        this.errorMessage = 'Failed to load products';
+        this.isLoading = false;
+      },
     });
+  }
 
-    this.productsService.getCategories().subscribe({
-      // เรียก2medthod เพราะงั้นจึงเข้าถึงตาราง category ได้ด้วย
+  loadCategories(): void {
+    this.categoriesService.getCategories().subscribe({
       next: (categories) => {
         this.category = categories;
+        console.log('Categories loaded:', categories);
       },
       error: (err) => {
         console.error('Error loading categories:', err);
-      }
+      },
     });
+  }
+
+  onEditProduct(productId: number): void {
+    console.log('Edit product:', productId);
+    this.router.navigate(['/products-edit', productId]);
+  }
+
+  onDeleteProduct(productId: number, productName: string): void {
+    // แสดง confirmation dialog
+    const confirmed = confirm(
+      `Are you sure you want to delete "${productName}"?\n\nThis action cannot be undone.`
+    );
+
+    if (confirmed) {
+      console.log('Deleting product:', productId);
+
+      this.productsService.deleteProduct(productId).subscribe({
+        next: () => {
+          console.log('Product deleted successfully');
+
+          // ลบสินค้าออกจาก array ใน UI
+          this.products = this.products.filter((p) => p.id !== productId);
+
+          // แสดงข้อความสำเร็จ
+          alert(`Product "${productName}" has been deleted successfully!`);
+        },
+        error: (err) => {
+          console.error('Error deleting product:', err);
+
+          // แสดงข้อความ error
+          if (err.status === 404) {
+            alert('Product not found. It may have been already deleted.');
+          } else {
+            alert('Failed to delete product. Please try again.');
+          }
+        },
+      });
+    } else {
+      console.log('Delete cancelled');
+    }
   }
 }

@@ -17,8 +17,5 @@ export const routes: Routes = [
 
   { path: 'category', component: category },
 
-
-
-  { path: 'users', component: Users }
-
+  { path: 'users', component: Users },
 ];

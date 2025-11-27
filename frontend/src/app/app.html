@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>E-commerce Admin Dashboard</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
-
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>E-commerce Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
   </head>
-<body class="bg-background-light dark:bg-background-dark font-display">
-  <div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto pb-20">
+  <body class="bg-background-light dark:bg-background-dark font-display">
+    <div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto pb-20">
+      <div class="top-app-bar">
+        <div class="profile-pic-container">
+          <div
+            class="profile-pic"
+            style="
+              background-image: url('https://tse1.mm.bing.net/th/id/OIP.HldaE_hiyhEv1q_K3dvXJQHaE8?rs=1&pid=ImgDetMain&o=7&rm=3');
+            "
+          ></div>
+          <h2>Dashboard</h2>
+        </div>
+        <button class="settings-btn">
+          <span class="material-symbols-outlined">settings</span>
+        </button>
+      </div>
 
-<div class="top-app-bar">
-  <div class="profile-pic-container">
-    <div class="profile-pic" style='background-image: url("https://tse1.mm.bing.net/th/id/OIP.HldaE_hiyhEv1q_K3dvXJQHaE8?rs=1&pid=ImgDetMain&o=7&rm=3");'>
-
-    </div>
-    <h2>Dashboard</h2>
-  </div>
-  <button class="settings-btn">
-    <span class="material-symbols-outlined">settings</span>
-  </button>
-</div>
-    
-    <!-- <h1 >Hello, Admin</h1>
+      <!-- <h1 >Hello, Admin</h1>
     
 
     <div class="flex flex-wrap gap-4 p-4">
@@ -46,8 +54,8 @@
         </div>
       </div>
     </div> -->
-    
-    <!-- <div class="flex flex-wrap gap-4 p-4">
+
+      <!-- <div class="flex flex-wrap gap-4 p-4">
           <h1 >Management</h1><br>
       <div class="management-grid">
         <div class="management-card">
@@ -102,38 +110,32 @@
         </div>
       </div>
     </div> -->
-
-
-  </div>
-
-
-  <div class="bottom-nav">
-    <div class="bottom-nav-content">
-      <a class="bottom-nav-item">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span>Dashboard</span>
-      </a>
-<a class="bottom-nav-item" [routerLink]="['/products']">
-  <span class="material-symbols-outlined">inventory_2</span>
-  <span>Products</span>
-</a>
-
-
-  <!-- <a >Category</a>-->
-
-
-
-      <a class="bottom-nav-item" href="#">
-        <span class="material-symbols-outlined">receipt_long</span>
-        <span>Orders</span>
-      </a >
-
-      <a class="bottom-nav-item" [routerLink]="['/users']">
-        <span class="material-symbols-outlined">person</span>
-        <span>Profile</span>
-      </a>
     </div>
-  </div>
-</body>
-  </html> 
-  <router-outlet></router-outlet>
+
+    <div class="bottom-nav">
+      <div class="bottom-nav-content">
+        <a class="bottom-nav-item">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+        <a class="bottom-nav-item" [routerLink]="['/products']">
+          <span class="material-symbols-outlined">inventory_2</span>
+          <span>Products</span>
+        </a>
+
+        <!-- <a >Category</a>-->
+
+        <a class="bottom-nav-item" href="#">
+          <span class="material-symbols-outlined">receipt_long</span>
+          <span>Orders</span>
+        </a>
+
+        <a class="bottom-nav-item" [routerLink]="['/users']">
+          <span class="material-symbols-outlined">person</span>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
+<router-outlet></router-outlet>

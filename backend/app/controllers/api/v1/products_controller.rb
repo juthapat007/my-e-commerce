@@ -24,19 +24,32 @@ module Api
       def create
         @product = Product.new(product_params)
 
+        # Debug: แสดงข้อมูลที่ได้รับ
+        Rails.logger.info "=== Creating Product ==="
+        Rails.logger.info "Params: #{product_params.inspect}"
+        Rails.logger.info "Product valid? #{@product.valid?}"
+        Rails.logger.info "Errors: #{@product.errors.full_messages}" unless @product.valid?
+
         if @product.save
-          render json: @product, status: :created
+          render json: @product.as_json(include: :category), status: :created
         else
-          render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
+          # ส่ง error messages กลับไปแบบละเอียด
+          render json: { 
+            errors: @product.errors.full_messages,
+            details: @product.errors.messages 
+          }, status: :unprocessable_entity
         end
       end
 
       # PATCH/PUT /api/v1/products/:id
       def update
         if @product.update(product_params)
-          render json: @product
+          render json: @product.as_json(include: :category)
         else
-          render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
+          render json: { 
+            errors: @product.errors.full_messages,
+            details: @product.errors.messages 
+          }, status: :unprocessable_entity
         end
       end
 

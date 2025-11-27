@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 export interface Category {
   id: number;
   name: string;
-  description?: string; //เหมือน ? จะว่างได้นะ 
+  description?: string; //เหมือน ? จะว่างได้นะ
   created_at: string;
 }
 
@@ -28,7 +28,7 @@ export interface Product {
 
 // เป็นการกำหนดtypeให้ข้อมูล
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductsService {
   private apiUrl = `${environment.apiUrl}`;
@@ -42,7 +42,7 @@ export class ProductsService {
     in_stock?: boolean;
   }): Observable<Product[]> {
     let params = new HttpParams();
-    
+
     if (filters?.category_id) {
       params = params.set('category_id', filters.category_id.toString());
     }
@@ -55,7 +55,6 @@ export class ProductsService {
 
     return this.http.get<Product[]>(`${this.apiUrl}/products`, { params });
   }
-
 
   // หน้านี่ทำงานคล้าย การส่งค่าผ่าน url http://localhost:3000/api/v1/products/${id} ไปจัดการ
 

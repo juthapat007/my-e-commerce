@@ -1,113 +1,140 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Products - Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
-
-</head>
-<body class="dark">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="dark">
     <div class="container">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-title">Products</h1>
+        <button class="theme-toggle" id="themeToggle">
+          <span class="material-symbols-outlined">dark_mode</span>
+          <span>Toggle Theme</span>
+        </button>
+      </div>
 
-
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1 class="page-title">Products</h1>
-            <button class="theme-toggle" id="themeToggle">
-                <span class="material-symbols-outlined">dark_mode</span>
-                <span>Toggle Theme</span>
-            </button>
-        </div>
-        
-        <!-- Products Grid -->
-        <div class="products-container">
-            <!-- Product Card 1 -->
-              <div class="product-card" *ngFor="let product of products">
-                <div class="product-image-container">
-                    <img src={{product.image_url}} 
-                         alt="not founde" class="product-image">
-                    <div class="product-category-tag" *ngFor="let category of category">{{product.category?.name}}</div>
-                </div>
-                <div class="product-content">
-                    <div class="product-header">
-                        <div>
-                            <h3 class="product-name">{{product.name}}</h3>
-                            <p class="product-brand">{{product.category?.name}}</p>
-                        </div>
-                        <div class="product-price">{{product.price | currency}}</div>
-                    </div>
-                    <p class="product-description">
-                        Premium over-ear headphones with noise cancellation and superior sound quality. Perfect for music enthusiasts and professionals.
-                    </p>
-                    <div class="product-footer">
-                        <div class="stock-status">
-                            <div class="status-indicator status-in-stock"></div>
-                            <span class="status-text">In Stock</span>
-                        </div>
-                        <div class="product-actions">
-                            <button class="action-btn edit">
-                                <span class="material-symbols-outlined">edit</span>
-                            </button>
-                            <button class="action-btn delete">
-                                <span class="material-symbols-outlined">delete</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+      <!-- Products Grid -->
+      <div class="products-container">
+        <!-- Product Card -->
+        <div class="product-card" *ngFor="let product of products">
+          <div class="product-image-container">
+            <img
+              [src]="product.image_url"
+              [alt]="product.image_alt || product.name"
+              class="product-image"
+            />
+            <div class="product-category-tag">{{ product.category?.name || 'No Category' }}</div>
+          </div>
+          <div class="product-content">
+            <div class="product-header">
+              <div>
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-brand">{{ product.brand || 'No Brand' }}</p>
+              </div>
+              <div class="product-price">
+                {{ product.price | currency : 'THB' : 'symbol-narrow' }}
+              </div>
             </div>
-            
-            <!-- Product Card 2 -->
-            
-            
-            <!-- Product Card 3 -->
-
-        </div>
-        
-        <!-- Empty State (Hidden by default) -->
-        <!-- Remove the "hidden" attribute to show the empty state -->
-        <div class="empty-state" hidden>
-            <div class="empty-icon">
-                <span class="material-symbols-outlined">inventory_2</span>
-            </div>
-            <h2 class="empty-title">No Products Yet</h2>
-            <p class="empty-description">
-                Get started by adding your first product to showcase in your store. 
-                You can add product details, images, pricing, and inventory information.
+            <p class="product-description">
+              {{ product.description || 'No description available' }}
             </p>
-            <button class="add-product-btn">
-                <span class="material-symbols-outlined">add</span>
-                <span>Add Your First Product</span>
-            </button>
+            <div class="product-footer">
+              <div class="stock-status">
+                <div
+                  class="status-indicator"
+                  [ngClass]="{
+                    'status-in-stock': product.stock > 10,
+                    'status-low-stock': product.stock > 0 && product.stock <= 10,
+                    'status-out-of-stock': product.stock === 0
+                  }"
+                ></div>
+                <span class="status-text">
+                  <span *ngIf="product.stock > 10">In Stock ({{ product.stock }})</span>
+                  <span *ngIf="product.stock > 0 && product.stock <= 10"
+                    >Low Stock ({{ product.stock }})</span
+                  >
+                  <span *ngIf="product.stock === 0">Out of Stock</span>
+                </span>
+              </div>
+              <div class="product-actions">
+                <button
+                  class="action-btn edit"
+                  (click)="onEditProduct(product.id)"
+                  title="Edit Product"
+                >
+                  <span class="material-symbols-outlined">edit</span>
+                </button>
+                <button
+                  class="action-btn delete"
+                  (click)="onDeleteProduct(product.id, product.name)"
+                  title="Delete Product"
+                >
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <!-- Floating Action Button -->
+      </div>
 
-          <a class="bottom-nav-item" [routerLink]="['/products-insert']">
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="products.length === 0 && !isLoading">
+        <div class="empty-icon">
+          <span class="material-symbols-outlined">inventory_2</span>
+        </div>
+        <h2 class="empty-title">No Products Yet</h2>
+        <p class="empty-description">
+          Get started by adding your first product to showcase in your store. You can add product
+          details, images, pricing, and inventory information.
+        </p>
+        <button class="add-product-btn" [routerLink]="['/products-insert']">
+          <span class="material-symbols-outlined">add</span>
+          <span>Add Your First Product</span>
+        </button>
+      </div>
 
-      
+      <!-- Loading State -->
+      <div class="empty-state" *ngIf="isLoading">
+        <div class="empty-icon">
+          <span class="material-symbols-outlined">hourglass_empty</span>
+        </div>
+        <h2 class="empty-title">Loading Products...</h2>
+      </div>
+
+      <!-- Floating Action Button -->
+      <a class="bottom-nav-item" [routerLink]="['/products-insert']">
         <div class="fab-container">
-            <button class="fab">
-                <span class="material-symbols-outlined">add</span>
-            </button>
+          <button class="fab">
+            <span class="material-symbols-outlined">add</span>
+          </button>
         </div>
-        </a>
+      </a>
     </div>
 
     <script>
-        // Theme toggle functionality
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            document.body.classList.toggle('dark');
-            
-            const icon = this.querySelector('.material-symbols-outlined');
-            if (document.body.classList.contains('dark')) {
-                icon.textContent = 'light_mode';
-            } else {
-                icon.textContent = 'dark_mode';
-            }
-        });
+      // Theme toggle functionality
+      document.getElementById('themeToggle').addEventListener('click', function () {
+        document.body.classList.toggle('dark');
+
+        const icon = this.querySelector('.material-symbols-outlined');
+        if (document.body.classList.contains('dark')) {
+          icon.textContent = 'light_mode';
+        } else {
+          icon.textContent = 'dark_mode';
+        }
+      });
     </script>
-</body>
+  </body>
 </html>
