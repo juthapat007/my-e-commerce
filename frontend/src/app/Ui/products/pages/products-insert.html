@@ -1,213 +1,201 @@
 <div class="container mt-5">
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h3 class="card-title mb-4">Create New Product</h3>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title mb-4">Create New Product</h3>
 
-            <!-- แสดง Error Message -->
-            @if (errorMessage) {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Error!</strong> {{ errorMessage }}
-                <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
-            </div>
-            }
+      <!-- Error Message -->
+      @if (errorMessage) {
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error!</strong> {{ errorMessage }}
+        <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+      </div>
+      }
 
-            <!-- แสดง Success Message -->
-            @if (successMessage) {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Success!</strong> {{ successMessage }}
-                <button type="button" class="btn-close" (click)="successMessage = ''"></button>
-            </div>
-            }
+      <!-- Success Message -->
+      @if (successMessage) {
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!</strong> {{ successMessage }}
+        <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+      </div>
+      }
 
-            <form>
-                <!-- Product Name -->
-                <div class="mb-3">
-                    <label for="name" class="form-label">Product Name *</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="name" 
-                        name="name"
-                        [(ngModel)]="product.name"
-                        placeholder="Enter product name"
-                        required
-                    >
-                </div>
-
-                <!-- Brand -->
-                <div class="mb-3">
-                    <label for="brand" class="form-label">Brand</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="brand" 
-                        name="brand"
-                        [(ngModel)]="product.brand"
-                        placeholder="Enter brand name"
-                    >
-                </div>
-
-                <!-- Category -->
-                <div class="mb-3">
-                    <label for="category_id" class="form-label">Category *</label>
-                    <select 
-                        class="form-select"
-                        id="category_id"
-                        name="category_id"
-                        [(ngModel)]="product.category_id"
-                        required
-                    >
-                        <option [value]="undefined" disabled>Select a category</option>
-                        @for (category of categories; track category.id) {
-                        <option [value]="category.id">
-                            {{ category.name }}
-                        </option>
-                        }
-                    </select>
-                </div>
-
-                <!-- Price -->
-                <div class="row">
-                    <div class="col-md-8 mb-3">
-                        <label for="price" class="form-label">Price *</label>
-                        <input 
-                            type="number" 
-                            class="form-control" 
-                            id="price" 
-                            name="price"
-                            [(ngModel)]="product.price"
-                            placeholder="Enter product price"
-                            min="0"
-                            step="0.01"
-                            required
-                        >
-                    </div>
-
-                    <!-- Currency -->
-                    <div class="col-md-4 mb-3">
-                        <label for="currency" class="form-label">Currency</label>
-                        <select 
-                            class="form-select"
-                            id="currency"
-                            name="currency"
-                            [(ngModel)]="product.currency"
-                        >
-                            <option value="THB">THB</option>
-                            <option value="USD">USD</option>
-                            <option value="EUR">EUR</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Stock -->
-                <div class="mb-3">
-                    <label for="stock" class="form-label">Stock *</label>
-                    <input 
-                        type="number" 
-                        class="form-control" 
-                        id="stock" 
-                        name="stock"
-                        [(ngModel)]="product.stock"
-                        placeholder="Enter stock quantity"
-                        min="0"
-                        required
-                    >
-                </div>
-
-                <!-- Description -->
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea 
-                        class="form-control" 
-                        id="description" 
-                        name="description"
-                        [(ngModel)]="product.description"
-                        rows="3" 
-                        placeholder="Enter product description"
-                    ></textarea>
-                </div>
-
-                <!-- Image Upload -->
-                <div class="mb-3">
-                    <label class="form-label">Product Image</label>
-                    
-                    <!-- ใช้ label หุ้ม input แทนการใช้ ViewChild -->
-                    <label for="fileInput" class="btn btn-outline-secondary d-block w-100">
-                        <i class="bi bi-upload"></i> Choose Image
-                    </label>
-                    
-                    <!-- Hidden file input -->
-                    <input 
-                        type="file" 
-                        class="d-none" 
-                        id="fileInput"
-                        name="fileInput"
-                        accept="image/*"
-                        (change)="onImageUpload($event)"
-                    >
-
-                    <!-- Image Preview -->
-                    @if (imagePreview) {
-                    <div class="mt-3 position-relative">
-                        <img 
-                            [src]="imagePreview" 
-                            alt="Preview" 
-                            class="img-thumbnail"
-                            style="max-width: 300px; max-height: 300px;"
-                        >
-                        <button 
-                            type="button" 
-                            class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2"
-                            (click)="removeImage()"
-                        >
-                            <i class="bi bi-x"></i> Remove
-                        </button>
-                    </div>
-                    }
-
-                    <!-- Selected file info -->
-                    <!-- @if (selectedFile) {
-                    <div class="mt-2 text-muted small">
-                        Selected: {{ selectedFile?.name }} ({{ (selectedFile?.size / 1024).toFixed(2) }} KB)
-                    </div>
-                    } -->
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="d-flex gap-2 mt-4">
-                    <button 
-                        type="button"
-                        class="btn btn-primary"
-                        (click)="onSaveProduct()"
-                        [disabled]="isLoading"
-                    >
-                        @if (isLoading) {
-                        <span class="spinner-border spinner-border-sm me-2"></span>
-                        Saving...
-                        } @else {
-                        Save Product
-                        }
-                    </button>
-                    
-                    <button 
-                        type="button" 
-                        class="btn btn-secondary"
-                        (click)="onGoBack()"
-                        [disabled]="isLoading"
-                    >
-                        Cancel
-                    </button>
-                    
-                    <button 
-                        type="button" 
-                        class="btn btn-outline-warning"
-                        (click)="resetForm()"
-                        [disabled]="isLoading"
-                    >
-                        Reset
-                    </button>
-                </div>
-            </form>
+      <form>
+        <!-- Product Name -->
+        <div class="mb-3">
+          <label for="name" class="form-label">Product Name *</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            [(ngModel)]="product.name"
+            placeholder="Enter product name"
+            required
+          />
         </div>
+
+        <!-- Brand -->
+        <div class="mb-3">
+          <label for="brand" class="form-label">Brand</label>
+          <input
+            type="text"
+            class="form-control"
+            id="brand"
+            name="brand"
+            [(ngModel)]="product.brand"
+            placeholder="Enter brand name"
+          />
+        </div>
+
+        <!-- Category -->
+        <div class="mb-3">
+          <label for="category_id" class="form-label">Category *</label>
+          <select
+            class="form-select"
+            id="category_id"
+            name="category_id"
+            [(ngModel)]="product.category_id"
+            required
+          >
+            <option [value]="undefined" disabled>Select a category</option>
+            @for (category of categories; track category.id) {
+            <option [value]="category.id">
+              {{ category.name }}
+            </option>
+            }
+          </select>
+        </div>
+
+        <!-- Price -->
+        <div class="row">
+          <div class="col-md-8 mb-3">
+            <label for="price" class="form-label">Price *</label>
+            <input
+              type="number"
+              class="form-control"
+              id="price"
+              name="price"
+              [(ngModel)]="product.price"
+              placeholder="Enter product price"
+              min="0"
+              step="0.01"
+              required
+            />
+          </div>
+
+          <!-- Currency -->
+          <div class="col-md-4 mb-3">
+            <label for="currency" class="form-label">Currency</label>
+            <select
+              class="form-select"
+              id="currency"
+              name="currency"
+              [(ngModel)]="product.currency"
+            >
+              <option value="THB">THB</option>
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Stock -->
+        <div class="mb-3">
+          <label for="stock" class="form-label">Stock *</label>
+          <input
+            type="number"
+            class="form-control"
+            id="stock"
+            name="stock"
+            [(ngModel)]="product.stock"
+            placeholder="Enter stock quantity"
+            min="0"
+            required
+          />
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            class="form-control"
+            id="description"
+            name="description"
+            [(ngModel)]="product.description"
+            rows="3"
+            placeholder="Enter product description"
+          ></textarea>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="mb-3">
+          <label class="form-label">Product Image</label>
+
+          <label for="fileInput" class="btn btn-outline-secondary d-block w-100">
+            <i class="bi bi-upload"></i> Choose Image
+          </label>
+
+          <input
+            type="file"
+            class="d-none"
+            id="fileInput"
+            name="fileInput"
+            accept="image/*"
+            (change)="onImageUpload($event)"
+          />
+
+          <!-- Image Preview -->
+          @if (imagePreview) {
+          <div class="mt-3 position-relative">
+            <img
+              [src]="imagePreview"
+              alt="Preview"
+              class="img-thumbnail"
+              style="max-width: 300px; max-height: 300px"
+            />
+            <button
+              type="button"
+              class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2"
+              (click)="removeImage()"
+            >
+              <i class="bi bi-x"></i> Remove
+            </button>
+          </div>
+          }
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex gap-2 mt-4">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="onSaveProduct()"
+            [disabled]="isLoading"
+          >
+            @if (isLoading) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Saving... } @else { Save Product }
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="onGoBack()"
+            [disabled]="isLoading"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-outline-warning"
+            (click)="resetForm()"
+            [disabled]="isLoading"
+          >
+            Reset
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>

@@ -24,7 +24,7 @@ module Api
       def create
         @product = Product.new(product_params)
 
-        # Debug: แสดงข้อมูลที่ได้รับ
+        # Debug logging
         Rails.logger.info "=== Creating Product ==="
         Rails.logger.info "Params: #{product_params.inspect}"
         Rails.logger.info "Product valid? #{@product.valid?}"
@@ -33,7 +33,7 @@ module Api
         if @product.save
           render json: @product.as_json(include: :category), status: :created
         else
-          # ส่ง error messages กลับไปแบบละเอียด
+          # Send detailed error messages back
           render json: { 
             errors: @product.errors.full_messages,
             details: @product.errors.messages 

@@ -116,18 +116,18 @@ export class ProductsInsert implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    // เตรียมข้อมูลสินค้า
+    // Prepare product data - ensure category_id is a number
     const productData: any = {
-      name: this.product.name,
-      brand: this.product.brand || '',
-      category_id: this.product.category_id,
-      price: this.product.price,
+      name: this.product.name.trim(),
+      brand: this.product.brand?.trim() || '',
+      category_id: this.product.category_id ? Number(this.product.category_id) : null,
+      price: Number(this.product.price),
       currency: this.product.currency,
-      stock: this.product.stock,
-      description: this.product.description || '',
+      stock: Number(this.product.stock),
+      description: this.product.description?.trim() || '',
     };
 
-    // ถ้ามีรูปภาพ ให้ใช้ image preview เป็น URL ชั่วคราว
+    // Add image if available
     if (this.imagePreview && typeof this.imagePreview === 'string') {
       productData.image_url = this.imagePreview;
       productData.image_alt = this.product.name;
@@ -135,36 +135,56 @@ export class ProductsInsert implements OnInit {
 
     console.log('Sending product data:', productData);
 
-    // เรียกใช้ ProductsService เพื่อสร้างสินค้า
+    // Call service to create product
     this.productsService.createProduct(productData).subscribe({
       next: (response) => {
         this.isLoading = false;
         this.successMessage = 'Product created successfully!';
         console.log('Product created:', response);
 
+        // Redirect after 1.5 seconds
         setTimeout(() => {
           this.router.navigate(['/products']);
         }, 1500);
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error creating product:', error);
+        console.error('Full error object:', error);
 
-        if (error.error && error.error.errors) {
-          this.errorMessage = Array.isArray(error.error.errors)
-            ? error.error.errors.join(', ')
-            : error.error.errors;
-        } else if (error.error && error.error.error) {
-          this.errorMessage = error.error.error;
+        // Handle different error formats
+        if (error.error) {
+          if (error.error.errors && Array.isArray(error.error.errors)) {
+            this.errorMessage = error.error.errors.join(', ');
+          } else if (error.error.errors) {
+            this.errorMessage = JSON.stringify(error.error.errors);
+          } else if (error.error.error) {
+            this.errorMessage = error.error.error;
+          } else if (typeof error.error === 'string') {
+            this.errorMessage = error.error;
+          } else {
+            this.errorMessage = 'Failed to create product. Please check all fields.';
+          }
+        } else if (error.message) {
+          this.errorMessage = error.message;
         } else {
           this.errorMessage = 'Failed to create product. Please try again.';
         }
+
+        // Log for debugging
+        console.error('Error details:', {
+          status: error.status,
+          statusText: error.statusText,
+          error: error.error,
+        });
       },
     });
   }
 
   private validateForm(): boolean {
-    if (!this.product.name.trim()) {
+    // Clear previous errors
+    this.errorMessage = '';
+
+    if (!this.product.name || !this.product.name.trim()) {
       this.errorMessage = 'Product name is required';
       return false;
     }

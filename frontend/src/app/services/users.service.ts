@@ -10,18 +10,19 @@ export interface User {
   created_at: string;
 }
 
-@Injectable({ providedIn: 'root'})
+@Injectable({
+  providedIn: 'root',
+})
+export class UsersService {
+  private apiUrl = `${environment.apiUrl}/users`;
 
-export class UsersService{
-     private apiUrl = `${environment.apiUrl}/users`;
-
-     constructor(private http: HttpClient){}
+  constructor(private http: HttpClient) {}
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
   }
 
-  getUser(id: number): Observable<User>{
+  getUser(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
-  }  
+  }
 }
