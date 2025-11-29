@@ -1,1 +1,93 @@
-<p>products-edit works!</p>
+<p *ngIf="isLoading">Loading product...</p>
+
+<div *ngIf="!isLoading && product">
+  <h3>Edit Product: {{ product.name }}</h3>
+
+  <!-- Img -->
+  <div class="mb-3">
+    <label for="image_url" class="form-label">Image URL</label>
+    <input type="text" id="image_url" class="form-control" [(ngModel)]="product.image_url" />
+    <div *ngIf="product.image_url" class="mt-2">
+      <img [src]="product.image_url" alt="Product Image" width="150" />
+    </div>
+    <!-- Name -->
+    <div class="mb-3">
+      <label for="name" class="form-label">Name *</label>
+      <input type="text" id="name" class="form-control" [(ngModel)]="product.name" required />
+    </div>
+
+    <!-- category -->
+    <div class="mb-3">
+      <label>Category</label><br />
+      <select [(ngModel)]="product.category_id">
+        <option [value]="null" disabled>Select a category</option>
+        <option *ngFor="let cat of category" [value]="cat.id">{{ cat.name }}</option></select
+      ><br /><br />
+
+      <!-- Brand -->
+      <div class="mb-3">
+        <label for="brand" class="form-label">Brand</label>
+        <input type="text" id="brand" class="form-control" [(ngModel)]="product.brand" />
+      </div>
+
+      <!-- Price -->
+      <div class="mb-3">
+        <label for="price" class="form-label">Price *</label>
+        <input
+          type="number"
+          id="price"
+          class="form-control"
+          [(ngModel)]="product.price"
+          min="0"
+          step="0.01"
+          required
+        />
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          id="description"
+          class="form-control"
+          rows="3"
+          [(ngModel)]="product.description"
+        ></textarea>
+      </div>
+
+      <!-- Stock -->
+      <div class="mb-3">
+        <label for="stock" class="form-label">Stock *</label>
+        <input
+          type="number"
+          id="stock"
+          class="form-control"
+          [(ngModel)]="product.stock"
+          min="0"
+          required
+        />
+      </div>
+
+      <!-- Currency -->
+      <div class="mb-3">
+        <label for="currency" class="form-label">Currency</label>
+        <select id="currency" class="form-select" [(ngModel)]="product.currency">
+          <option value="THB">THB</option>
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+        </select>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="d-flex gap-2 mt-3">
+        <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        <button class="btn btn-primary" (click)="saveProduct()">Save</button>
+      </div>
+    </div>
+
+    <!-- Error message -->
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>

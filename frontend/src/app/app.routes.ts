@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { Products } from './Ui/products/products';
-import { category } from './Ui/category/category';
+import { Category } from './Ui/category/category';
 import { Users } from './Ui/users/users';
 import { AppComponent } from './app';
 import { ProductsInsert } from './Ui/products/products-insert';
@@ -13,9 +13,9 @@ export const routes: Routes = [
 
   { path: 'products', component: Products },
   { path: 'products-insert', component: ProductsInsert },
-  { path: 'products-edit', component: ProductsEdit },
+  { path: 'products-edit/:id', component: ProductsEdit },
 
-  { path: 'category', component: category },
+  { path: 'category', component: Category },
 
   { path: 'users', component: Users },
 ];

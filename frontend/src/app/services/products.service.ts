@@ -2,19 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export interface Category {
-  id: number;
-  name: string;
-  description?: string; //เหมือน ? จะว่างได้นะ
-  created_at: string;
-}
+import { categories } from './categories.service';
 
 export interface Product {
   id: number;
   name: string;
   category_id?: number;
-  category?: Category;
+  category?: categories;
   price: number;
   currency: string;
   stock: number;
@@ -79,12 +73,12 @@ export class ProductsService {
   }
 
   // Get all categories
-  getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.apiUrl}/categories`);
+  getCategories(): Observable<categories[]> {
+    return this.http.get<categories[]>(`${this.apiUrl}/categories`);
   }
 
   // Get category with products
-  getCategory(id: number): Observable<Category> {
-    return this.http.get<Category>(`${this.apiUrl}/categories/${id}`);
+  getCategory(id: number): Observable<categories> {
+    return this.http.get<categories>(`${this.apiUrl}/categories/${id}`);
   }
 }

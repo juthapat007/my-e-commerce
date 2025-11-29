@@ -56,7 +56,7 @@ export class Products implements OnInit {
     });
   }
 
-  onEditProduct(productId: number): void {
+  onEditProduct(productId: number) {
     console.log('Edit product:', productId);
     this.router.navigate(['/products-edit', productId]);
   }

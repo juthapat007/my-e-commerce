@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Category } from '../../services/products.service'; 
+import { categories } from '../../services/categories.service';
 import { CategoriesService } from '../../services/categories.service';
 import { CommonModule } from '@angular/common';
 import { error } from 'console';
@@ -8,17 +8,16 @@ import { error } from 'console';
   selector: 'app-category',
   imports: [CommonModule],
   templateUrl: './category.html',
-  styleUrl: '../style.css'
+  styleUrl: '../style.css',
 })
-export class category{
-  category: Category[] = [];
+export class Category {
+  categories: categories[] = [];
   constructor(private CategoriesService: CategoriesService) {}
 
   ngOnInit(): void {
     this.CategoriesService.getCategories().subscribe({
-      next:(data) => this.category = data,
-      error: (err) => console.error('Error:',err)
+      next: (data) => (this.categories = data),
+      error: (err) => console.error('Error:', err),
     });
   }
-
 }

@@ -52,7 +52,7 @@
             </span>
           </div>
           <div class="product-actions">
-            <a [routerLink]="['/products-edit']" [queryParams]="{ id: product.id }">
+            <a [routerLink]="['/products-edit', product.id]">
               <button
                 class="btn-products btn btn-warning flex-grow-1 me-1"
                 (click)="onEditProduct(product.id)"
