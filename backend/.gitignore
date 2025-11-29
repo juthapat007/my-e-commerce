@@ -30,6 +30,10 @@
 
 /public/assets
 
+# Ignore uploaded files but keep the directory
+/public/uploads/*
+!/public/uploads/.keep
+
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 

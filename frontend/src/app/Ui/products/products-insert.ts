@@ -84,7 +84,9 @@ export class ProductsInsert implements OnInit {
       }
 
       this.selectedFile = file;
+      this.errorMessage = '';
 
+      // Create preview
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result;
@@ -106,6 +108,7 @@ export class ProductsInsert implements OnInit {
   onSaveProduct(): void {
     console.log('=== Saving Product ===');
     console.log('Product data:', this.product);
+    console.log('Selected file:', this.selectedFile);
 
     // Validate form
     if (!this.validateForm()) {
@@ -116,75 +119,51 @@ export class ProductsInsert implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    // Prepare product data - ensure category_id is a number
+    // Prepare product data (without image_url - backend will set it)
     const productData: any = {
-      name: this.product.name.trim(),
-      brand: this.product.brand?.trim() || '',
-      category_id: this.product.category_id ? Number(this.product.category_id) : null,
-      price: Number(this.product.price),
+      name: this.product.name,
+      brand: this.product.brand || '',
+      category_id: this.product.category_id,
+      price: this.product.price,
       currency: this.product.currency,
-      stock: Number(this.product.stock),
-      description: this.product.description?.trim() || '',
+      stock: this.product.stock,
+      description: this.product.description || '',
+      image_alt: this.product.name, // Use product name as alt text
     };
 
-    // Add image if available
-    if (this.imagePreview && typeof this.imagePreview === 'string') {
-      productData.image_url = this.imagePreview;
-      productData.image_alt = this.product.name;
-    }
-
     console.log('Sending product data:', productData);
+    console.log('Sending image file:', this.selectedFile?.name);
 
-    // Call service to create product
-    this.productsService.createProduct(productData).subscribe({
+    // Call service with file
+    this.productsService.createProduct(productData, this.selectedFile || undefined).subscribe({
       next: (response) => {
         this.isLoading = false;
         this.successMessage = 'Product created successfully!';
         console.log('Product created:', response);
 
-        // Redirect after 1.5 seconds
         setTimeout(() => {
           this.router.navigate(['/products']);
         }, 1500);
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Full error object:', error);
+        console.error('Error creating product:', error);
 
-        // Handle different error formats
-        if (error.error) {
-          if (error.error.errors && Array.isArray(error.error.errors)) {
-            this.errorMessage = error.error.errors.join(', ');
-          } else if (error.error.errors) {
-            this.errorMessage = JSON.stringify(error.error.errors);
-          } else if (error.error.error) {
-            this.errorMessage = error.error.error;
-          } else if (typeof error.error === 'string') {
-            this.errorMessage = error.error;
-          } else {
-            this.errorMessage = 'Failed to create product. Please check all fields.';
-          }
-        } else if (error.message) {
-          this.errorMessage = error.message;
+        if (error.error && error.error.errors) {
+          this.errorMessage = Array.isArray(error.error.errors)
+            ? error.error.errors.join(', ')
+            : error.error.errors;
+        } else if (error.error && error.error.error) {
+          this.errorMessage = error.error.error;
         } else {
           this.errorMessage = 'Failed to create product. Please try again.';
         }
-
-        // Log for debugging
-        console.error('Error details:', {
-          status: error.status,
-          statusText: error.statusText,
-          error: error.error,
-        });
       },
     });
   }
 
   private validateForm(): boolean {
-    // Clear previous errors
-    this.errorMessage = '';
-
-    if (!this.product.name || !this.product.name.trim()) {
+    if (!this.product.name.trim()) {
       this.errorMessage = 'Product name is required';
       return false;
     }

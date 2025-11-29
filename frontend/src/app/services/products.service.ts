@@ -2,13 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { categories } from './categories.service';
+
+export interface Category {
+  id: number;
+  name: string;
+  description?: string;
+  created_at: string;
+}
 
 export interface Product {
   id: number;
   name: string;
   category_id?: number;
-  category?: categories;
+  category?: Category;
   price: number;
   currency: string;
   stock: number;
@@ -20,7 +26,6 @@ export interface Product {
   updated_at: string;
 }
 
-// เป็นการกำหนดtypeให้ข้อมูล
 @Injectable({
   providedIn: 'root',
 })
@@ -50,21 +55,49 @@ export class ProductsService {
     return this.http.get<Product[]>(`${this.apiUrl}/products`, { params });
   }
 
-  // หน้านี่ทำงานคล้าย การส่งค่าผ่าน url http://localhost:3000/api/v1/products/${id} ไปจัดการ
-
   // Get single product by ID
   getProduct(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/products/${id}`);
   }
 
-  // Create new product
-  createProduct(product: Partial<Product>): Observable<Product> {
-    return this.http.post<Product>(`${this.apiUrl}/products`, { product });
+  // Create new product with file upload
+  createProduct(product: Partial<Product>, imageFile?: File): Observable<Product> {
+    const formData = new FormData();
+
+    // Add product fields
+    Object.keys(product).forEach((key) => {
+      const value = product[key as keyof Product];
+      if (value !== undefined && value !== null) {
+        formData.append(`product[${key}]`, value.toString());
+      }
+    });
+
+    // Add image file if provided
+    if (imageFile) {
+      formData.append('image', imageFile, imageFile.name);
+    }
+
+    return this.http.post<Product>(`${this.apiUrl}/products`, formData);
   }
 
-  // Update existing product
-  updateProduct(id: number, product: Partial<Product>): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/products/${id}`, { product });
+  // Update existing product with optional file upload
+  updateProduct(id: number, product: Partial<Product>, imageFile?: File): Observable<Product> {
+    const formData = new FormData();
+
+    // Add product fields
+    Object.keys(product).forEach((key) => {
+      const value = product[key as keyof Product];
+      if (value !== undefined && value !== null) {
+        formData.append(`product[${key}]`, value.toString());
+      }
+    });
+
+    // Add image file if provided
+    if (imageFile) {
+      formData.append('image', imageFile, imageFile.name);
+    }
+
+    return this.http.put<Product>(`${this.apiUrl}/products/${id}`, formData);
   }
 
   // Delete product
@@ -73,12 +106,12 @@ export class ProductsService {
   }
 
   // Get all categories
-  getCategories(): Observable<categories[]> {
-    return this.http.get<categories[]>(`${this.apiUrl}/categories`);
+  getCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.apiUrl}/categories`);
   }
 
   // Get category with products
-  getCategory(id: number): Observable<categories> {
-    return this.http.get<categories>(`${this.apiUrl}/categories/${id}`);
+  getCategory(id: number): Observable<Category> {
+    return this.http.get<Category>(`${this.apiUrl}/categories/${id}`);
   }
 }

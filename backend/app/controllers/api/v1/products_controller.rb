@@ -80,6 +80,34 @@ module Api
           :image_alt
         )
       end
+
+
+      def handle_image_upload(uploaded_file)
+        # Create uploads directory if it doesn't exist
+        uploads_dir = Rails.root.join('public', 'uploads')
+        FileUtils.mkdir_p(uploads_dir) unless Dir.exist?(uploads_dir)
+
+        # Generate unique filename
+        timestamp = Time.now.strftime('%Y%m%d%H%M%S')
+        random_string = SecureRandom.hex(4)
+        file_extension = File.extname(uploaded_file.original_filename)
+        filename = "product_#{timestamp}_#{random_string}#{file_extension}"
+
+        # Save file
+        file_path = uploads_dir.join(filename)
+        File.open(file_path, 'wb') do |file|
+          file.write(uploaded_file.read)
+        end
+
+        # Set image_url to relative path
+        @product.image_url = "/uploads/#{filename}"
+        @product.image_alt = @product.name if @product.image_alt.blank?
+
+        Rails.logger.info "Image uploaded: #{filename}"
+      rescue => e
+        Rails.logger.error "Image upload failed: #{e.message}"
+        render json: { error: "Image upload failed: #{e.message}" }, status: :unprocessable_entity
+      end
     end
   end
 end
