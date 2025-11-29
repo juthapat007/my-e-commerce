@@ -19,4 +19,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  post '/uploads', to: 'upload#create'
+
 end
