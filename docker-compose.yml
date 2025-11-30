@@ -1,35 +1,77 @@
-version: "3.9"
-
 services:
+  # PostgreSQL Database
   db:
-    image: postgres:16
-    container_name: postgres-db
+    image: postgres:18
+    container_name: myapp_postgres
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: myapp_dev
+    volumes:
+      # Postgres 18+ ต้องการ mount ที่ /var/lib/postgresql แทน /var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
     ports:
       - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
+    networks:
+      - myapp_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # Rails Backend
   backend:
-    build: ./backend
-    container_name: rails-backend
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0 -p 3000"
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: myapp_rails
+    restart: unless-stopped
     environment:
-      RAILS_ENV: development
       DATABASE_HOST: db
       DATABASE_PORT: 5432
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
-      DATABASE_NAME: myapp_dev
+      RAILS_ENV: development
+      SECRET_KEY_BASE: dummy_secret_key_base_for_development_only_change_in_production
     volumes:
       - ./backend:/rails
+      - rails_bundle:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    networks:
+      - myapp_network
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      bash -c "
+        bundle install &&
+        rails db:prepare &&
+        rails server -b 0.0.0.0
+      "
+
+  # Angular Frontend (Optional)
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: myapp_angular
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   ports:
+  #     - "4200:4200"
+  #   networks:
+  #     - myapp_network
+  #   command: npm start
+
+networks:
+  myapp_network:
+    driver: bridge
 
 volumes:
-  db_data:
+  postgres_data:
+  rails_bundle:
